@@ -1,4 +1,4 @@
-<h1 style="text-center>Progetto Finale - Haniel<h1/>
+<h1 style="text-center">Progetto Finale - Haniel<h1/>
 
 Web App per salone di parrucchieri
 
