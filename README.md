@@ -1,3 +1,6 @@
+![Haniel Banner](./HanielBannerProject.png)
+
+
 ## ITALIANO 🇮🇹
 
 # 💇‍♀️ Progetto Finale – Haniel
