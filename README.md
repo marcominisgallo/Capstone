@@ -1,3 +1,5 @@
+## ITALIANO 🇮🇹
+
 # 💇‍♀️ Progetto Finale – Haniel
 
 ## 🧴 Web App per salone di parrucchieri
@@ -36,6 +38,7 @@ Marco Minisgallo – Progetto finale EPICODE
 🔗 LinkedIn (http://linkedin.com/in/marco-minisgallo-23991120a)
 
 ---------------------------------------------------------------------------------------------------------
+## ENGLISH
 
 # 💇‍♀️ Final Project – Haniel
 
