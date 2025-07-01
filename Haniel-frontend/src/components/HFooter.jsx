@@ -45,16 +45,10 @@ function HFooter() {
           CONTATTI
         </h6>
         <div className=" d-flex flex-column align-items-center">
-          <a
-            href="tel:+393519440379"
-            className="text-decoration-none text-black"
-          >
+          <a href="tel:+393519440379" className="text-black">
             <p className="my-1">+39 351 9440379</p>
           </a>
-          <a
-            href="tel:+3907015254471"
-            className="text-decoration-none text-black"
-          >
+          <a href="tel:+3907015254471" className="text-black">
             <p className="my-1">+39 070 15254471</p>
           </a>
         </div>
