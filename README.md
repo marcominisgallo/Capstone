@@ -34,3 +34,43 @@ Il progetto consiste nello sviluppo di una pagina web dinamica per il salone di 
 Marco Minisgallo – Progetto finale EPICODE
 📧 Email: [marcominisgallo@yahoo.it]
 🔗 LinkedIn (http://linkedin.com/in/marco-minisgallo-23991120a)
+
+---------------------------------------------------------------------------------------------------------
+
+# 💇‍♀️ Final Project – Haniel
+
+## 🧴 Web App for Hair Salon
+
+This project consists of developing a dynamic web page for the **Haniel** hair salon, designed to offer a complete digital experience for both clients and administrators.
+
+🎯 **Project Objectives:**
+- Provide a modern and functional user interface.
+- Allow users to view services, browse the gallery, and book appointments.
+- Offer administrators a full-featured system for managing bookings.
+
+---
+
+## 🛠️ Technologies Used
+
+| Frontend | Backend     | Others       |
+|----------|-------------|--------------|
+| React    | Spring      | HTML/CSS     |
+| Vite     | Spring Boot | JWT (Auth)   |
+
+---
+
+## 🔐 Main Features
+
+- User authentication (clients and admins).
+- Clients can book appointments.
+- Appointments can be edited or canceled.
+- Advanced booking management for administrators.
+- Modern and responsive interface.
+
+---
+
+## 👨‍🎓 Author  
+Marco Minisgallo – Final Project for EPICODE  
+📧 Email: [marcominisgallo@yahoo.it]  
+🔗 [LinkedIn](http://linkedin.com/in/marco-minisgallo-23991120a)
+
