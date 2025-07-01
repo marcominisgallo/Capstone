@@ -1,4 +1,4 @@
-    # 💇‍♀️ Progetto Finale – Haniel
+# 💇‍♀️ Progetto Finale – Haniel
 
 ## 🧴 Web App per salone di parrucchieri
 
