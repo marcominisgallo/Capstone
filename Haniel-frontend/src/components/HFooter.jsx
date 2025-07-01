@@ -31,11 +31,10 @@ function HFooter() {
         </h6>
         <a
           href="https://maps.app.goo.gl/ocK7C38a3kFWP86D7?g_st=ic"
-          className="text-decoration-none text-black d-flex flex-column align-items-center"
+          className="text-black d-flex flex-column align-items-center"
         >
           <p className="my-1">Via S.Lucifero,47</p>
-          <p className="my-1">09125</p>
-          <p className="my-1">Cagliari (CA)</p>
+          <p className="my-1">09125 Cagliari (CA)</p>
         </a>
       </Container>
       <Container className="text-center my-3">
