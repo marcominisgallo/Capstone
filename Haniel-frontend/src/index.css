@@ -1,7 +1,15 @@
 nav.bg-white.py-1.border-bottom.border-2 {
-    border-color: #F8C94E !important;
+    border-color: #F5C232 !important;
   }
 
 #footer {
-    background-color: #F8C94E !important;
+    background-color: #F5C232 !important;
   }
+
+  h1 {
+    color: #E69A00 !important;
+  }
+
+  /*h4 {
+    color: #F5B000 !important;
+  }*/
