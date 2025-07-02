@@ -4,10 +4,16 @@ import { Col, Container, Row } from "react-bootstrap";
 
 function HWhoWeAre() {
   return (
-    <Container>
+    <Container
+      id="max"
+      fluid
+      className=" border-bottom border-2 border-black mb-4"
+    >
       <Row>
-        <Col xs={12} lg={6}>
-          <h1 className="mt-5 mb-3">Chi siamo</h1>
+        <Col xs={12} lg={4} className="offset-lg-2">
+          <h1 id="whoweare" className="mt-5">
+            Chi siamo
+          </h1>
           <h4 className="mt-5">Un Luogo Pensato per Te</h4>
           <p>
             L’ambiente è moderno, elegante e accogliente, studiato per regalare
@@ -39,7 +45,7 @@ function HWhoWeAre() {
             pensato per offrire un’esperienza unica e altamente personalizzata.
           </p>
         </Col>
-        <Col>
+        <Col xs={12} lg={4}>
           <Row>
             <Col xs={10} className="offset-2 mt-5">
               <img src={image0} alt="" className="w-100 h-100 mt-3" />

@@ -13,3 +13,11 @@ nav.bg-white.py-1.border-bottom.border-2 {
   /*h4 {
     color: #F5B000 !important;
   }*/
+
+  h1#whoweare {
+    margin-bottom: 1.9em !important;
+  }
+
+  div#max {
+    border-color: #F5C232 !important;
+  }
