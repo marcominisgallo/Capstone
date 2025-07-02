@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HNavbar from "./components/HNavbar";
 import HFooter from "./components/HFooter";
 import HWhoWeAre from "./components/HWhoWeAre";
+import HHome from "./components/HHome";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -14,6 +15,7 @@ function App() {
       <BrowserRouter>
         <HNavbar />
         <Routes>
+          <Route path="/" element={<HHome />} />
           <Route path="/chi-siamo" element={<HWhoWeAre />} />
         </Routes>
         <HFooter />

@@ -9,7 +9,7 @@ function HNavbar() {
       className="bg-white py-1 border-bottom border-2"
     >
       <Container>
-        <Navbar.Brand href="#home" className="d-flex align-items-center">
+        <Navbar.Brand as={Link} to="/" className="d-flex align-items-center">
           <img
             alt=""
             src="/public/HanielLogo.svg"

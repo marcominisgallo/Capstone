@@ -2,14 +2,11 @@ import image0 from "../assets/pic/image0.jpeg";
 import image1 from "../assets/pic/image1.jpeg";
 import image2 from "../assets/pic/image15.jpeg";
 import { Col, Container, Row } from "react-bootstrap";
+import HMax from "./HMax";
 
 function HWhoWeAre() {
   return (
-    <Container
-      id="max"
-      fluid
-      className=" border-bottom border-2 border-black mb-4"
-    >
+    <HMax>
       <Row>
         <Col
           xs={12}
@@ -66,7 +63,7 @@ function HWhoWeAre() {
           </Row>
         </Col>
       </Row>
-    </Container>
+    </HMax>
   );
 }
 
