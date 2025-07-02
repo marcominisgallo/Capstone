@@ -1,5 +1,6 @@
 import image0 from "../assets/pic/image0.jpeg";
 import image1 from "../assets/pic/image1.jpeg";
+import image2 from "../assets/pic/image15.jpeg";
 import { Col, Container, Row } from "react-bootstrap";
 
 function HWhoWeAre() {
@@ -10,7 +11,13 @@ function HWhoWeAre() {
       className=" border-bottom border-2 border-black mb-4"
     >
       <Row>
-        <Col xs={12} lg={4} className="offset-lg-2">
+        <Col
+          xs={12}
+          sm={10}
+          md={8}
+          xl={4}
+          className="offset-sm-1 offset-md-2 offset-lg-2"
+        >
           <h1 id="whoweare" className="mt-5">
             Chi siamo
           </h1>
@@ -45,13 +52,16 @@ function HWhoWeAre() {
             pensato per offrire un’esperienza unica e altamente personalizzata.
           </p>
         </Col>
-        <Col xs={12} lg={4}>
+        <Col xs={12} md={10} xl={4} className="offset-md-1 mt-5">
           <Row>
-            <Col xs={10} className="offset-2 mt-5">
-              <img src={image0} alt="" className="w-100 h-100 mt-3" />
+            <Col xs={10} className="offset-1 offset-lg-1 gap-3">
+              <img src={image0} alt="" className="w-100 h-100" />
             </Col>
-            <Col xs={10} className="offset-2 mt-5">
-              <img src={image1} alt="" className="w-100 h-75 mt-3" />
+            <Col xs={10} className="offset-1 offset-lg-1 g-3">
+              <img src={image1} alt="" className="w-100 h-100" />
+            </Col>
+            <Col xs={10} className="offset-1 offset-lg-1 g-3 mb-5">
+              <img src={image2} alt="" className="w-100 h-100" />
             </Col>
           </Row>
         </Col>
