@@ -25,8 +25,10 @@ function HNavbar() {
             <Nav.Link as={Link} to="/chi-siamo">
               Chi siamo
             </Nav.Link>
-            <Nav.Link href="#pricing">Servizi offerti</Nav.Link>
-            <Nav.Link href="#">Contatti</Nav.Link>
+            <Nav.Link>Servizi offerti</Nav.Link>
+            <Nav.Link as={Link} to="/contatti">
+              Contatti
+            </Nav.Link>
           </Nav>
           <Nav>
             <Nav.Link href="#deets">Prenota</Nav.Link>

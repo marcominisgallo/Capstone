@@ -12,14 +12,18 @@ function App() {
 
   return (
     <>
-      <BrowserRouter>
-        <HNavbar />
-        <Routes>
-          <Route path="/" element={<HHome />} />
-          <Route path="/chi-siamo" element={<HWhoWeAre />} />
-        </Routes>
-        <HFooter />
-      </BrowserRouter>
+      <div id="app">
+        <BrowserRouter>
+          <HNavbar />
+          <div id="main-content">
+            <Routes>
+              <Route path="/" element={<HHome />} />
+              <Route path="/chi-siamo" element={<HWhoWeAre />} />
+            </Routes>
+          </div>
+          <HFooter />
+        </BrowserRouter>
+      </div>
     </>
   );
 }

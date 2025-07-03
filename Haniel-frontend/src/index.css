@@ -1,3 +1,13 @@
+#app {
+  display: flex;
+  flex-direction: column; /* Dispone gli elementi in colonna */
+  min-height: 100vh; /* Assicura che l'altezza sia almeno quella della finestra */
+}
+
+#main-content {
+  flex-grow: 1; /* Permette al contenuto principale di occupare lo spazio disponibile */
+}
+
 nav.bg-white.py-1.border-bottom.border-2 {
     border-color: #F5C232 !important;
   }
@@ -22,6 +32,10 @@ nav.bg-white.py-1.border-bottom.border-2 {
     border-color: #F5C232 !important;
   }
 
+  #HomePic{
+    position: relative;
+  }
+
   #PrenotaButton {
     position: absolute;
     bottom: -7%;
@@ -29,8 +43,4 @@ nav.bg-white.py-1.border-bottom.border-2 {
     background-color: #BFD3BF !important;
     color: black;
     border: none;
-  }
-
-  #HomePic{
-    position: relative;
   }
