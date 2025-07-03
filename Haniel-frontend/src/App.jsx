@@ -6,6 +6,7 @@ import HNavbar from "./components/HNavbar";
 import HFooter from "./components/HFooter";
 import HWhoWeAre from "./components/HWhoWeAre";
 import HHome from "./components/HHome";
+import HContactS from "./components/HContactS";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -15,10 +16,14 @@ function App() {
       <div id="app">
         <BrowserRouter>
           <HNavbar />
-          <div id="main-content">
+          <div
+            id="main-content"
+            className=" border-bottom border-2 border-black mb-4"
+          >
             <Routes>
               <Route path="/" element={<HHome />} />
               <Route path="/chi-siamo" element={<HWhoWeAre />} />
+              <Route path="/contatti" element={<HContactS />} />
             </Routes>
           </div>
           <HFooter />

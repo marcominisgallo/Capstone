@@ -1,11 +1,12 @@
 #app {
   display: flex;
-  flex-direction: column; /* Dispone gli elementi in colonna */
-  min-height: 100vh; /* Assicura che l'altezza sia almeno quella della finestra */
+  flex-direction: column; 
+  min-height: 100vh;
 }
 
 #main-content {
-  flex-grow: 1; /* Permette al contenuto principale di occupare lo spazio disponibile */
+  flex-grow: 1; 
+  border-color: #F5C232 !important;
 }
 
 nav.bg-white.py-1.border-bottom.border-2 {
@@ -29,7 +30,7 @@ nav.bg-white.py-1.border-bottom.border-2 {
   }
 
   div#max {
-    border-color: #F5C232 !important;
+    
   }
 
   #HomePic{
@@ -44,3 +45,41 @@ nav.bg-white.py-1.border-bottom.border-2 {
     color: black;
     border: none;
   }
+
+  #ContactCard {
+    position: absolute;
+    top: 15%;
+    left: 25%;
+    opacity: 0.9;
+  }
+  
+  @media screen and (max-width: 450px) {
+    #ContactCard {
+      position: absolute;
+      top: -1%;
+      left: 16%;
+    }
+  }
+  
+  @media screen and (max-width: 768px) {
+    #ContactCard {
+      position: absolute;
+      top: 20%;
+      left: 30%;
+    }
+  }
+  @media screen and (max-width: 850px) {
+    #ContactCard {
+      position: absolute;
+      top: 20%;
+      left: 30%;
+    }
+  }
+  @media screen and (max-width: 1024px) {
+    #ContactCard {
+      position: absolute;
+      top: 3%;
+      left: 17%;
+    }
+  }
+  
