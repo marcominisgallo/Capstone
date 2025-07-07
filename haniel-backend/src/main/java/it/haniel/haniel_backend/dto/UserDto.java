@@ -1,5 +1,6 @@
 package it.haniel.haniel_backend.dto;
 
+import it.haniel.haniel_backend.enumeration.Role;
 import lombok.Data;
 
 @Data

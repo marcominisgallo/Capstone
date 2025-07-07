@@ -1,5 +1,6 @@
 package it.haniel.haniel_backend.model;
 
+import it.haniel.haniel_backend.enumeration.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

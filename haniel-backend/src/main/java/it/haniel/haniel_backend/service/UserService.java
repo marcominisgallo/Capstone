@@ -1,5 +1,7 @@
 package it.haniel.haniel_backend.service;
 
+import it.haniel.haniel_backend.model.User;
+import it.haniel.haniel_backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

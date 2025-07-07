@@ -1,5 +1,8 @@
 package it.haniel.haniel_backend.service;
 
+import it.haniel.haniel_backend.model.Appointment;
+import it.haniel.haniel_backend.model.User;
+import it.haniel.haniel_backend.repository.AppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
