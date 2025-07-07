@@ -3,7 +3,7 @@ import { Clock, GeoAlt, Telephone } from "react-bootstrap-icons";
 
 function HFooter() {
   return (
-    <Container fluid id="footer">
+    <Container fluid id="footer" className="pt-2 pb-4">
       <Row>
         <Col
           xs={12}

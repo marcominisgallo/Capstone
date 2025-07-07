@@ -1,20 +1,34 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState } from "react";
 import "./App.css";
-import { BrowserRouter, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HNavbar from "./components/HNavbar";
 import HFooter from "./components/HFooter";
+import HWhoWeAre from "./components/HWhoWeAre";
+import HHome from "./components/HHome";
+import HContactS from "./components/HContactS";
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
     <>
-      <BrowserRouter>
-        <HNavbar />
-        <Routes></Routes>
-        <HFooter />
-      </BrowserRouter>
+      <div id="app">
+        <BrowserRouter>
+          <HNavbar />
+          <div
+            id="main-content"
+            className=" border-bottom border-2 border-black mb-4"
+          >
+            <Routes>
+              <Route path="/" element={<HHome />} />
+              <Route path="/chi-siamo" element={<HWhoWeAre />} />
+              <Route path="/contatti" element={<HContactS />} />
+            </Routes>
+          </div>
+          <HFooter />
+        </BrowserRouter>
+      </div>
     </>
   );
 }

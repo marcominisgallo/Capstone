@@ -1,7 +1,85 @@
+#app {
+  display: flex;
+  flex-direction: column; 
+  min-height: 100vh;
+}
+
+#main-content {
+  flex-grow: 1; 
+  border-color: #F5C232 !important;
+}
+
 nav.bg-white.py-1.border-bottom.border-2 {
-    border-color: #F8C94E !important;
+    border-color: #F5C232 !important;
   }
 
 #footer {
-    background-color: #F8C94E !important;
+    background-color: #F5C232 !important;
   }
+
+  h1 {
+    color: #E69A00 !important;
+  }
+
+  /*h4 {
+    color: #F5B000 !important;
+  }*/
+
+  h1#whoweare {
+    margin-bottom: 1.9em !important;
+  }
+
+  div#max {
+    
+  }
+
+  #HomePic{
+    position: relative;
+  }
+
+  #PrenotaButton {
+    position: absolute;
+    bottom: -7%;
+    left: 30%;
+    background-color: #BFD3BF !important;
+    color: black;
+    border: none;
+  }
+
+  #ContactCard {
+    position: absolute;
+    top: 15%;
+    left: 25%;
+    opacity: 0.9;
+  }
+  
+  @media screen and (max-width: 450px) {
+    #ContactCard {
+      position: absolute;
+      top: -1%;
+      left: 16%;
+    }
+  }
+  
+  @media screen and (max-width: 768px) {
+    #ContactCard {
+      position: absolute;
+      top: 20%;
+      left: 30%;
+    }
+  }
+  @media screen and (max-width: 850px) {
+    #ContactCard {
+      position: absolute;
+      top: 20%;
+      left: 30%;
+    }
+  }
+  @media screen and (max-width: 1024px) {
+    #ContactCard {
+      position: absolute;
+      top: 3%;
+      left: 17%;
+    }
+  }
+  

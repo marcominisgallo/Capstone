@@ -1,4 +1,5 @@
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 function HNavbar() {
   return (
@@ -8,7 +9,7 @@ function HNavbar() {
       className="bg-white py-1 border-bottom border-2"
     >
       <Container>
-        <Navbar.Brand href="#home" className="d-flex align-items-center">
+        <Navbar.Brand as={Link} to="/" className="d-flex align-items-center">
           <img
             alt=""
             src="/public/HanielLogo.svg"
@@ -21,9 +22,13 @@ function HNavbar() {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="#features">Chi siamo</Nav.Link>
-            <Nav.Link href="#pricing">Servizi offerti</Nav.Link>
-            <Nav.Link href="#">Contatti</Nav.Link>
+            <Nav.Link as={Link} to="/chi-siamo">
+              Chi siamo
+            </Nav.Link>
+            <Nav.Link>Servizi offerti</Nav.Link>
+            <Nav.Link as={Link} to="/contatti">
+              Contatti
+            </Nav.Link>
           </Nav>
           <Nav>
             <Nav.Link href="#deets">Prenota</Nav.Link>
