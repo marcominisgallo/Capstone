@@ -9,6 +9,8 @@ import it.haniel.haniel_backend.service.AppointmentService;
 import it.haniel.haniel_backend.service.ServiceService;
 import it.haniel.haniel_backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -20,8 +22,6 @@ public class AppointmentController {
     @Autowired
     private AppointmentService appointmentService;
     @Autowired
-    private UserService userService;
-    @Autowired
     private ServiceService serviceService;
 
     @GetMapping("/{id}")
@@ -32,9 +32,13 @@ public class AppointmentController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('CLIENT')")
     public AppointmentDto createAppointment(@RequestBody AppointmentDto dto) {
-        User client = userService.findById(dto.getClientId())
-                .orElseThrow(() -> new ResourceNotFoundException("Cliente non trovato"));
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!(principal instanceof User client)) {
+            throw new ResourceNotFoundException("Utente autenticato non trovato");
+        }
         Set<ServiceEntity> services = dto.getServiceIds().stream()
                 .map(id -> serviceService.findById(id)
                         .orElseThrow(() -> new ResourceNotFoundException("Servizio non trovato: " + id)))
