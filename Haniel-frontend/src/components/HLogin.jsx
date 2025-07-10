@@ -20,7 +20,13 @@ function HLogin() {
     const endpoint = isLogin ? "/api/auth/login" : "/api/auth/register";
     const payload = isLogin
       ? { email, password }
-      : { name, surname, phone, email, password };
+      : {
+          email, // Email dell'utente
+          password, // Password dell'utente
+          nome: name, // Nome dell'utente
+          cognome: surname, // Cognome dell'utente
+          telefono: phone, // Telefono dell'utente
+        };
 
     fetch(`http://localhost:8080${endpoint}`, {
       method: "POST",
@@ -111,11 +117,11 @@ function HLogin() {
             required
           />
         </Form.Group>
-        <Button id="LoginButton" type="submit" className="w-100">
+        <Button type="submit" className="w-100">
           {isLogin ? "Accedi" : "Registrati"}
         </Button>
       </Form>
-      <div className="text-center my-3">
+      <div className="text-center mt-3">
         <Button variant="link" onClick={() => setIsLogin(!isLogin)}>
           {isLogin
             ? "Non hai un account? Registrati"

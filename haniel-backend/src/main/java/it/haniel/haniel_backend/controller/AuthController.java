@@ -3,6 +3,7 @@ package it.haniel.haniel_backend.controller;
 import it.haniel.haniel_backend.enumeration.Role;
 import it.haniel.haniel_backend.model.User;
 import it.haniel.haniel_backend.security.JwtUtil;
+import it.haniel.haniel_backend.service.EmailService;
 import it.haniel.haniel_backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,16 +23,23 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private JwtUtil jwtUtil;
+    @Autowired
+    private EmailService emailService;
 
     @PostMapping("/register")
-    public String register(@RequestBody User user) {
+    public Map<String, String> register(@RequestBody User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.CLIENT);
         if (user.getNome() == null || user.getCognome() == null || user.getTelefono() == null) {
             throw new RuntimeException("Nome, cognome e telefono sono obbligatori");
         }
         userService.save(user);
-        return "Registrazione avvenuta con successo";
+        try {
+            emailService.sendRegistrationEmail(user.getEmail(), user.getNome());
+        } catch (Exception e) {
+            System.err.println("Errore invio email: " + e.getMessage());
+        }
+        return Map.of("message", "Registrazione avvenuta con successo");
     }
 
     @PostMapping("/login")
