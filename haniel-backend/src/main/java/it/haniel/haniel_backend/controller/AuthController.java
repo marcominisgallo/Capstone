@@ -1,5 +1,6 @@
 package it.haniel.haniel_backend.controller;
 
+import it.haniel.haniel_backend.enumeration.Role;
 import it.haniel.haniel_backend.model.User;
 import it.haniel.haniel_backend.security.JwtUtil;
 import it.haniel.haniel_backend.service.UserService;
@@ -25,6 +26,7 @@ public class AuthController {
     @PostMapping("/register")
     public String register(@RequestBody User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(Role.CLIENT);
         userService.save(user);
         return "Registrazione avvenuta con successo";
     }
