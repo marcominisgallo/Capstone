@@ -28,7 +28,7 @@ public class Appointment {
             joinColumns = @JoinColumn(name = "appointment_id"),
             inverseJoinColumns = @JoinColumn(name = "service_id")
     )
-    private Set<Service> services;
+    private Set<ServiceEntity> services;
 
     @Column(nullable = false)
     private LocalDateTime dateTime;

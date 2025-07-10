@@ -1,7 +1,9 @@
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 function HNavbar() {
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   return (
     <Navbar
       collapseOnSelect
@@ -31,7 +33,9 @@ function HNavbar() {
             </Nav.Link>
           </Nav>
           <Nav>
-            <Nav.Link href="#deets">Prenota</Nav.Link>
+            <Nav.Link as={Link} to={isAuthenticated ? "/prenota" : "/login"}>
+              Prenota
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
