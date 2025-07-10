@@ -14,7 +14,7 @@ function HNavbar() {
         <Navbar.Brand as={Link} to="/" className="d-flex align-items-center">
           <img
             alt=""
-            src="/public/HanielLogo.svg"
+            src="/HanielLogo.svg"
             height="50"
             className="d-inline-block align-top"
           />
