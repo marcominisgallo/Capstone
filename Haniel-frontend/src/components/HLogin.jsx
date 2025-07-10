@@ -117,11 +117,11 @@ function HLogin() {
             required
           />
         </Form.Group>
-        <Button type="submit" className="w-100">
+        <Button id="LoginButton" type="submit" className="w-100">
           {isLogin ? "Accedi" : "Registrati"}
         </Button>
       </Form>
-      <div className="text-center mt-3">
+      <div className="text-center my-3">
         <Button variant="link" onClick={() => setIsLogin(!isLogin)}>
           {isLogin
             ? "Non hai un account? Registrati"
