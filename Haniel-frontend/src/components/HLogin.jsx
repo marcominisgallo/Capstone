@@ -5,9 +5,11 @@ import { loginSuccess } from "../redux/authSlice";
 
 function HLogin() {
   const [isLogin, setIsLogin] = useState(true); // Stato per alternare tra login e registrazione
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState(""); // Solo per la registrazione
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
@@ -16,7 +18,9 @@ function HLogin() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const endpoint = isLogin ? "/api/auth/login" : "/api/auth/register";
-    const payload = isLogin ? { email, password } : { name, email, password };
+    const payload = isLogin
+      ? { email, password }
+      : { name, surname, phone, email, password };
 
     fetch(`http://localhost:8080${endpoint}`, {
       method: "POST",
@@ -54,16 +58,38 @@ function HLogin() {
       {success && <Alert variant="success">{success}</Alert>}
       <Form onSubmit={handleSubmit}>
         {!isLogin && (
-          <Form.Group controlId="formName" className="mb-3">
-            <Form.Label>Nome</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Inserisci il tuo nome"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          </Form.Group>
+          <>
+            <Form.Group controlId="formName" className="mb-3">
+              <Form.Label>Nome</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Inserisci il tuo nome"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </Form.Group>
+            <Form.Group controlId="formSurname" className="mb-3">
+              <Form.Label>Cognome</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Inserisci il tuo cognome"
+                value={surname}
+                onChange={(e) => setSurname(e.target.value)}
+                required
+              />
+            </Form.Group>
+            <Form.Group controlId="formPhone" className="mb-3">
+              <Form.Label>Telefono</Form.Label>
+              <Form.Control
+                type="tel"
+                placeholder="Inserisci il tuo numero di telefono"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                required
+              />
+            </Form.Group>
+          </>
         )}
         <Form.Group controlId="formEmail" className="mb-3">
           <Form.Label>Email</Form.Label>
@@ -85,11 +111,11 @@ function HLogin() {
             required
           />
         </Form.Group>
-        <Button type="submit" className="w-100">
+        <Button id="LoginButton" type="submit" className="w-100">
           {isLogin ? "Accedi" : "Registrati"}
         </Button>
       </Form>
-      <div className="text-center mt-3">
+      <div className="text-center my-3">
         <Button variant="link" onClick={() => setIsLogin(!isLogin)}>
           {isLogin
             ? "Non hai un account? Registrati"

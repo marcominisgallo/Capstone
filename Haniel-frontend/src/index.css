@@ -29,9 +29,9 @@ nav.bg-white.py-1.border-bottom.border-2 {
     margin-bottom: 1.9em !important;
   }
 
-  div#max {
+  /*div#max {
     
-  }
+  }*/
 
   #HomePic{
     position: relative;
@@ -41,6 +41,12 @@ nav.bg-white.py-1.border-bottom.border-2 {
     position: absolute;
     bottom: -7%;
     left: 30%;
+    background-color: #BFD3BF !important;
+    color: black;
+    border: none;
+  }
+
+  #LoginButton {
     background-color: #BFD3BF !important;
     color: black;
     border: none;

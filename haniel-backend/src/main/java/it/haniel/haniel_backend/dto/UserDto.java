@@ -8,4 +8,7 @@ public class UserDto {
     private Long id;
     private String email;
     private Role role;
+    private String nome;
+    private String cognome;
+    private String telefono;
 }

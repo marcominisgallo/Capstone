@@ -27,6 +27,9 @@ public class AuthController {
     public String register(@RequestBody User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.CLIENT);
+        if (user.getNome() == null || user.getCognome() == null || user.getTelefono() == null) {
+            throw new RuntimeException("Nome, cognome e telefono sono obbligatori");
+        }
         userService.save(user);
         return "Registrazione avvenuta con successo";
     }
