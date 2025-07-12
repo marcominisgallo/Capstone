@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 function HHome() {
   return (
     <HMax>
-      <Row>
+      <Row className="mb-5 mb-lg-3 ">
         <Col
           xs={8}
           md={6}
@@ -21,7 +21,7 @@ function HHome() {
         >
           <img src="./HanielLogo.svg" alt="logo" className="w-100" />
         </Col>
-        <Col xs={10} lg={6} className="offset-1 offset-lg-1 mt-5">
+        <Col xs={10} lg={6} className="offset-2 offset-lg-1 mt-5">
           <div id="HomePic">
             <Image src={image1} className="w-75 mt-5 rounded-2" />
             <Link to="/prenota">

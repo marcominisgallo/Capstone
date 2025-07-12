@@ -122,7 +122,11 @@ function HLogin() {
         </Button>
       </Form>
       <div className="text-center my-3">
-        <Button variant="link" onClick={() => setIsLogin(!isLogin)}>
+        <Button
+          id="LoginOption"
+          variant="link"
+          onClick={() => setIsLogin(!isLogin)}
+        >
           {isLogin
             ? "Non hai un account? Registrati"
             : "Hai già un account? Accedi"}
