@@ -6,6 +6,8 @@ import it.haniel.haniel_backend.security.JwtUtil;
 import it.haniel.haniel_backend.service.EmailService;
 import it.haniel.haniel_backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,14 +45,20 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public Map<String, String> login(@RequestBody Map<String, String> body) {
-        String email = body.get("email");
-        String password = body.get("password");
-        User user = userService.findByEmail(email).orElseThrow(() -> new RuntimeException("Utente non trovato"));
-        if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new RuntimeException("Password errata");
+    public ResponseEntity<?> login(@RequestBody Map<String, String> body) {
+        try {
+            String email = body.get("email");
+            String password = body.get("password");
+            User user = userService.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("Utente non trovato"));
+            if (!passwordEncoder.matches(password, user.getPassword())) {
+                throw new RuntimeException("Password errata");
+            }
+            String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
+            return ResponseEntity.ok(Map.of("token", token));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", e.getMessage()));
         }
-        String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
-        return Map.of("token", token);
     }
 }

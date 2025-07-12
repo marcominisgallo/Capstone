@@ -6,15 +6,15 @@
 
 #main-content {
   flex-grow: 1; 
-  border-color: #F5C232 !important;
+  border-color: #D0B3AB !important;
 }
 
 nav.bg-white.py-1.border-bottom.border-2 {
-    border-color: #F5C232 !important;
+    border-color: #D0B3AB !important;
   }
 
 #footer {
-    background-color: #F5C232 !important;
+    background-color: #D0B3AB !important;
   }
 
   h1 {
@@ -89,3 +89,6 @@ nav.bg-white.py-1.border-bottom.border-2 {
     }
   }
   
+  #LoginOption{
+    color: #8B9F8B !important;
+  }
