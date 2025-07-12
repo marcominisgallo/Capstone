@@ -3,16 +3,16 @@ import react from "@vitejs/plugin-react";
 
 // Configurazione di Vite
 export default defineConfig({
-  plugins: [react()], // Plugin per supportare React
+  plugins: [react()],
   build: {
-    outDir: "dist", // Specifica la directory di output per il build
+    outDir: "dist", // La directory di output sarà 'dist' (Netlify la cerca qui)
   },
   server: {
-    port: 3000, // Porta per il server di sviluppo (puoi cambiarla se necessario)
+    port: 3000, // Porta per il server di sviluppo locale
   },
   resolve: {
     alias: {
-      "@": "/src", // Alias per semplificare i percorsi (opzionale)
+      "@": "/src", // Alias opzionale per semplificare i percorsi
     },
   },
 });
