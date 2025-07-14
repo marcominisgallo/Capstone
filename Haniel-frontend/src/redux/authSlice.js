@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  token: null,
+  token: localStorage.getItem("token") || null, // Recupera il token da localStorage al refresh
   user: null,
-  isAuthenticated: false,
+  isAuthenticated: !!localStorage.getItem("token"), // Verifica se il token esiste
 };
 
 const authSlice = createSlice({
@@ -14,11 +14,13 @@ const authSlice = createSlice({
       state.token = action.payload.token;
       state.user = action.payload.user;
       state.isAuthenticated = true;
+      localStorage.setItem("token", action.payload.token); // Salva il token in localStorage
     },
     logout(state) {
       state.token = null;
       state.user = null;
       state.isAuthenticated = false;
+      localStorage.removeItem("token"); // Rimuovi il token da localStorage
     },
   },
 });
