@@ -32,4 +32,16 @@ public class Appointment {
 
     @Column(nullable = false)
     private LocalDateTime dateTime;
+
+    @Column(nullable = false)
+    private String nome;
+
+    @Column(nullable = false)
+    private String cognome;
+
+    @Column(nullable = false)
+    private String telefono;
+
+    @Column
+    private String noteAggiuntive;
 }

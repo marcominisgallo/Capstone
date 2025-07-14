@@ -8,6 +8,7 @@ import HWhoWeAre from "./components/HWhoWeAre";
 import HHome from "./components/HHome";
 import HContactS from "./components/HContactS";
 import HLogin from "./components/HLogin";
+import HBook from "./components/HBook";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -26,7 +27,7 @@ function App() {
               <Route path="/chi-siamo" element={<HWhoWeAre />} />
               <Route path="/contatti" element={<HContactS />} />
               <Route path="/login" element={<HLogin />} />
-              {/*<Route path="/prenota" element={<Prenota />} />*/}
+              <Route path="/prenota" element={<HBook />} />
             </Routes>
           </div>
           <HFooter />

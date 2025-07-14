@@ -11,4 +11,8 @@ public class AppointmentDto {
     private Long clientId;
     private Set<Long> serviceIds;
     private LocalDateTime dateTime;
+    private String nome;
+    private String cognome;
+    private String telefono;
+    private String noteAggiuntive;
 }

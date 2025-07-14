@@ -34,11 +34,20 @@ public class AppointmentController {
     @PostMapping
     @PreAuthorize("hasRole('CLIENT')")
     public AppointmentDto createAppointment(@RequestBody AppointmentDto dto) {
-
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (!(principal instanceof User client)) {
             throw new ResourceNotFoundException("Utente autenticato non trovato");
         }
+
+        // Validazione campi obbligatori
+        if (dto.getNome() == null || dto.getNome().isBlank() ||
+                dto.getCognome() == null || dto.getCognome().isBlank() ||
+                dto.getTelefono() == null || dto.getTelefono().isBlank() ||
+                dto.getDateTime() == null ||
+                dto.getServiceIds() == null || dto.getServiceIds().isEmpty()) {
+            throw new RuntimeException("Tutti i campi obbligatori devono essere compilati");
+        }
+
         Set<ServiceEntity> services = dto.getServiceIds().stream()
                 .map(id -> serviceService.findById(id)
                         .orElseThrow(() -> new ResourceNotFoundException("Servizio non trovato: " + id)))
@@ -48,6 +57,11 @@ public class AppointmentController {
         appointment.setClient(client);
         appointment.setServices(services);
         appointment.setDateTime(dto.getDateTime());
+        appointment.setNome(dto.getNome());
+        appointment.setCognome(dto.getCognome());
+        appointment.setTelefono(dto.getTelefono());
+        appointment.setNoteAggiuntive(dto.getNoteAggiuntive());
+
         Appointment saved = appointmentService.save(appointment);
         return toDto(saved);
     }
@@ -63,6 +77,10 @@ public class AppointmentController {
         dto.setClientId(appointment.getClient().getId());
         dto.setServiceIds(appointment.getServices().stream().map(ServiceEntity::getId).collect(Collectors.toSet()));
         dto.setDateTime(appointment.getDateTime());
+        dto.setNome(appointment.getNome());
+        dto.setCognome(appointment.getCognome());
+        dto.setTelefono(appointment.getTelefono());
+        dto.setNoteAggiuntive(appointment.getNoteAggiuntive());
         return dto;
     }
 }
