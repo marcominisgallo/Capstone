@@ -1,6 +1,6 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, Links } from "react-router-dom";
 import { toggleNavbar, closeNavbar } from "../redux/navbarSlice";
 
 function HNavbar() {
@@ -44,7 +44,11 @@ function HNavbar() {
             >
               Chi siamo
             </Nav.Link>
-            <Nav.Link onClick={() => dispatch(closeNavbar())}>
+            <Nav.Link
+              as={Link}
+              to="/servizi-offerti"
+              onClick={() => dispatch(closeNavbar())}
+            >
               Servizi offerti
             </Nav.Link>
             <Nav.Link
