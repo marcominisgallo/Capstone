@@ -52,12 +52,27 @@ nav.bg-white.py-1.border-bottom.border-2 {
     border: none;
   }
 
+  #detailsButton {
+    color: #8B9F8B;
+  }
+
   #ContactCard {
     position: absolute;
     top: 15%;
     left: 25%;
     opacity: 0.9;
   }
+
+.accordion-button:not(.collapsed) {
+  background-color: #BFD3BF;
+  color: black;
+}
+
+.accordion-button:focus {
+  box-shadow: 0 0 0 3px #8B9F8B;
+  border-color: #8B9F8B;
+  outline: none;
+}
   
   @media screen and (max-width: 450px) {
     #ContactCard {
