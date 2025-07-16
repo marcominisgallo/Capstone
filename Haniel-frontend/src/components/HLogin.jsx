@@ -26,30 +26,29 @@ function HLogin() {
       ? { email, password }
       : { email, password, nome, cognome, telefono }; // Aggiungi i campi richiesti per la registrazione
 
-    fetch(`http://localhost:8080${endpoint}`, {
+    fetch("http://localhost:8080/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }), // Aggiungi il token JWT se esiste
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({ email, password }),
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Errore nella richiesta");
+          throw new Error("Errore durante il login");
         }
         return response.json();
       })
       .then((data) => {
-        if (isLogin) {
-          // Dispatch Redux action per salvare il token e l'utente
-          dispatch(loginSuccess({ token: data.token, user: data.user }));
-          setSuccess("Accesso effettuato con successo!");
-          navigate("/prenota"); // Reindirizza al path per prenotare
-        } else {
-          setSuccess("Registrazione completata con successo!");
-        }
+        // Salva il token e i dati dell'utente in localStorage
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+
+        // Dispatch Redux action per salvare il token e l'utente
+        dispatch(loginSuccess({ token: data.token, user: data.user }));
+        setSuccess("Accesso effettuato con successo!");
         setError("");
+        navigate("/prenota"); // Reindirizza al path per prenotare
       })
       .catch((error) => {
         setError("Errore: " + error.message);
@@ -113,7 +112,6 @@ function HLogin() {
         <Form.Group controlId="formEmail" className="mb-3">
           <Form.Label>Email</Form.Label>
           <Form.Control
-            id="EmailInput"
             type="email"
             placeholder="Inserisci la tua email"
             value={email}
@@ -124,7 +122,6 @@ function HLogin() {
         <Form.Group controlId="formPassword" className="mb-3">
           <Form.Label>Password</Form.Label>
           <Form.Control
-            id="PasswordInput"
             type="password"
             placeholder="Inserisci la tua password"
             value={password}

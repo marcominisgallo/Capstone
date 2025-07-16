@@ -12,6 +12,7 @@ import {
 import servicesData from "../data/servicesData";
 import { useDispatch, useSelector } from "react-redux";
 import { Pencil, Trash } from "react-bootstrap-icons";
+import { loginSuccess } from "../redux/authSlice";
 
 function HBook() {
   const [selectedService, setSelectedService] = useState("");
@@ -38,6 +39,16 @@ function HBook() {
     console.log("Utente autenticato:", user); // Debug per verificare il valore di `user`
     console.log("Token:", token); // Debug per verificare il valore di `token`
   }, [user, token]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+
+    if (token && user) {
+      // Ripristina lo stato Redux con i dati salvati
+      dispatch(loginSuccess({ token, user: JSON.parse(user) }));
+    }
+  }, [dispatch]);
 
   // Genera gli orari disponibili
   useEffect(() => {
@@ -114,8 +125,8 @@ function HBook() {
 
     const endpoint =
       user.role === "ADMIN"
-        ? "/api/bookings/all"
-        : `/api/bookings?user=${user.email}`;
+        ? "/api/appointments/all"
+        : `/api/appointments?user=${user.email}`;
 
     fetch(`http://localhost:8080${endpoint}`, {
       method: "GET",
@@ -200,8 +211,72 @@ function HBook() {
     setShowModal(false);
   };
 
+  const handleUpdateBooking = (e) => {
+    e.preventDefault();
+
+    const dateTime = selectedBooking.dateTime;
+
+    // Verifica la disponibilità dell'orario
+    fetch(
+      `http://localhost:8080/api/appointments/check-availability?dateTime=${dateTime}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Errore nella verifica della disponibilità");
+        }
+        return response.json();
+      })
+      .then((isAvailable) => {
+        if (!isAvailable) {
+          setError(
+            "L'orario selezionato non è disponibile. Scegli un altro orario."
+          );
+          throw new Error("Orario non disponibile");
+        }
+
+        // Effettua la richiesta di aggiornamento
+        return fetch(
+          `http://localhost:8080/api/appointments/${selectedBooking.id}`,
+          {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(selectedBooking),
+          }
+        );
+      })
+      .then((updateResponse) => {
+        if (!updateResponse.ok) {
+          throw new Error("Errore nell'aggiornamento della prenotazione");
+        }
+        return updateResponse.json();
+      })
+      .then((updatedBooking) => {
+        setBookings((prevBookings) =>
+          prevBookings.map((b) =>
+            b.id === updatedBooking.id ? updatedBooking : b
+          )
+        );
+        setSuccess("Prenotazione aggiornata con successo!");
+        setShowModal(false);
+      })
+      .catch((error) => {
+        console.error("Errore:", error);
+        setError(error.message);
+      });
+  };
+
   const handleDeleteBooking = (bookingId) => {
-    fetch(`http://localhost:8080/api/bookings/${bookingId}`, {
+    fetch(`http://localhost:8080/api/appointments/${bookingId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -379,28 +454,130 @@ function HBook() {
           <Modal.Title>Modifica Prenotazione</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          {error && <Alert variant="danger">{error}</Alert>}
+          {success && <Alert variant="success">{success}</Alert>}
           {selectedBooking && (
-            <div>
-              <p>
-                <strong>Servizio:</strong> {selectedBooking.serviceName}
-              </p>
-              <p>
-                <strong>Data e Ora:</strong> {selectedBooking.dateTime}
-              </p>
-              <p>
-                <strong>Nome:</strong> {selectedBooking.nome}
-              </p>
-              <p>
-                <strong>Cognome:</strong> {selectedBooking.cognome}
-              </p>
-              <p>
-                <strong>Telefono:</strong> {selectedBooking.telefono}
-              </p>
-              <p>
-                <strong>Note:</strong>{" "}
-                {selectedBooking.noteAggiuntive || "Nessuna nota"}
-              </p>
-            </div>
+            <Form onSubmit={(e) => handleUpdateBooking(e)}>
+              <Form.Group controlId="formService" className="mb-3">
+                <Form.Label>Servizio</Form.Label>
+                <Form.Select
+                  value={selectedBooking.serviceName}
+                  onChange={(e) =>
+                    setSelectedBooking({
+                      ...selectedBooking,
+                      serviceName: e.target.value,
+                    })
+                  }
+                  required
+                >
+                  <option value="" disabled>
+                    Seleziona un servizio
+                  </option>
+                  {servicesData.map((category) =>
+                    category.services.map((service) => (
+                      <option key={service.id} value={service.name}>
+                        {service.name}
+                      </option>
+                    ))
+                  )}
+                </Form.Select>
+              </Form.Group>
+              <Form.Group controlId="formDate" className="mb-3">
+                <Form.Label>Data</Form.Label>
+                <Form.Control
+                  type="date"
+                  value={selectedBooking.dateTime.split("T")[0]} // Estrai la data
+                  onChange={(e) =>
+                    setSelectedBooking({
+                      ...selectedBooking,
+                      dateTime: `${e.target.value}T${
+                        selectedBooking.dateTime.split("T")[1]
+                      }`, // Mantieni l'orario
+                    })
+                  }
+                  required
+                />
+              </Form.Group>
+              <Form.Group controlId="formTime" className="mb-3">
+                <Form.Label>Orario</Form.Label>
+                <Form.Select
+                  value={selectedBooking.dateTime.split("T")[1]} // Estrai l'orario
+                  onChange={(e) =>
+                    setSelectedBooking({
+                      ...selectedBooking,
+                      dateTime: `${selectedBooking.dateTime.split("T")[0]}T${
+                        e.target.value
+                      }`, // Mantieni la data
+                    })
+                  }
+                  required
+                >
+                  {timeSlots.map((slot) => (
+                    <option key={slot} value={slot}>
+                      {slot}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+              <Form.Group controlId="formNome" className="mb-3">
+                <Form.Label>Nome</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={selectedBooking.nome}
+                  onChange={(e) =>
+                    setSelectedBooking({
+                      ...selectedBooking,
+                      nome: e.target.value,
+                    })
+                  }
+                  required
+                />
+              </Form.Group>
+              <Form.Group controlId="formCognome" className="mb-3">
+                <Form.Label>Cognome</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={selectedBooking.cognome}
+                  onChange={(e) =>
+                    setSelectedBooking({
+                      ...selectedBooking,
+                      cognome: e.target.value,
+                    })
+                  }
+                  required
+                />
+              </Form.Group>
+              <Form.Group controlId="formTelefono" className="mb-3">
+                <Form.Label>Telefono</Form.Label>
+                <Form.Control
+                  type="tel"
+                  value={selectedBooking.telefono}
+                  onChange={(e) =>
+                    setSelectedBooking({
+                      ...selectedBooking,
+                      telefono: e.target.value,
+                    })
+                  }
+                  required
+                />
+              </Form.Group>
+              <Form.Group controlId="formNoteAggiuntive" className="mb-3">
+                <Form.Label>Note Aggiuntive</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  value={selectedBooking.noteAggiuntive || ""}
+                  onChange={(e) =>
+                    setSelectedBooking({
+                      ...selectedBooking,
+                      noteAggiuntive: e.target.value,
+                    })
+                  }
+                />
+              </Form.Group>
+              <Button type="submit" variant="primary" className="w-100">
+                Salva Modifiche
+              </Button>
+            </Form>
           )}
         </Modal.Body>
         <Modal.Footer>
