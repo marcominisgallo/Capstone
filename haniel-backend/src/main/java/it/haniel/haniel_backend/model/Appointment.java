@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Entity
 @Table(name = "appointments")
@@ -22,13 +21,8 @@ public class Appointment {
     @JoinColumn(name = "client_id")
     private User client;
 
-    @ManyToMany
-    @JoinTable(
-            name = "appointment_services",
-            joinColumns = @JoinColumn(name = "appointment_id"),
-            inverseJoinColumns = @JoinColumn(name = "service_id")
-    )
-    private Set<ServiceEntity> services;
+    @Column(nullable = false)
+    private String serviceName; // Nuovo campo stringa
 
     @Column(nullable = false)
     private LocalDateTime dateTime;

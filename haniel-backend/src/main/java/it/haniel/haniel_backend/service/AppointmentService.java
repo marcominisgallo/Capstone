@@ -6,6 +6,7 @@ import it.haniel.haniel_backend.repository.AppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,5 +33,9 @@ public class AppointmentService {
 
     public void deleteById(Long id) {
         appointmentRepository.deleteById(id);
+    }
+
+    public int countByDateTime(LocalDateTime dateTime) {
+        return appointmentRepository.countByDateTime(dateTime);
     }
 }

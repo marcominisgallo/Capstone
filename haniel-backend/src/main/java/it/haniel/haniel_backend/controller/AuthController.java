@@ -1,5 +1,6 @@
 package it.haniel.haniel_backend.controller;
 
+import it.haniel.haniel_backend.dto.UserDto;
 import it.haniel.haniel_backend.enumeration.Role;
 import it.haniel.haniel_backend.model.User;
 import it.haniel.haniel_backend.security.JwtUtil;
@@ -55,7 +56,20 @@ public class AuthController {
                 throw new RuntimeException("Password errata");
             }
             String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
-            return ResponseEntity.ok(Map.of("token", token));
+
+            // Crea UserDto senza password
+            UserDto userDto = new UserDto();
+            userDto.setId(user.getId());
+            userDto.setEmail(user.getEmail());
+            userDto.setRole(user.getRole());
+            userDto.setNome(user.getNome());
+            userDto.setCognome(user.getCognome());
+            userDto.setTelefono(user.getTelefono());
+
+            return ResponseEntity.ok(Map.of(
+                    "token", token,
+                    "user", userDto
+            ));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("error", e.getMessage()));

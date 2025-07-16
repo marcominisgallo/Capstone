@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Form, Button, Alert } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { loginSuccess } from "../redux/authSlice";
-import { useNavigate } from "react-router-dom"; // Importa useNavigate
+import { Form, Button, Alert } from "react-bootstrap";
 
 function HLogin() {
   const [isLogin, setIsLogin] = useState(true); // Stato per alternare tra login e registrazione
@@ -16,20 +16,15 @@ function HLogin() {
 
   const dispatch = useDispatch();
   const token = useSelector((state) => state.auth.token); // Recupera il token dal Redux store
-  const navigate = useNavigate(); // Hook per navigare tra le route
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const endpoint = isLogin ? "/api/auth/login" : "/api/auth/register";
     const payload = isLogin
       ? { email, password }
-      : {
-          email,
-          password,
-          nome,
-          cognome,
-          telefono,
-        };
+      : { email, password, nome, cognome, telefono }; // Aggiungi i campi richiesti per la registrazione
 
     fetch(`http://localhost:8080${endpoint}`, {
       method: "POST",

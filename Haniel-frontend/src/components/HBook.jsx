@@ -1,50 +1,174 @@
-import React, { useState } from "react";
-import { Form, Button, Alert } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import {
+  Form,
+  Button,
+  Card,
+  Row,
+  Col,
+  Alert,
+  Offcanvas,
+  Modal,
+} from "react-bootstrap";
+import servicesData from "../data/servicesData";
+import { useDispatch, useSelector } from "react-redux";
+import { Pencil, Trash } from "react-bootstrap-icons";
 
 function HBook() {
-  const [serviceIds, setServiceIds] = useState([]); // Stato per gli id dei servizi scelti
-  const [date, setDate] = useState(""); // Stato per la data dell'appuntamento
-  const [time, setTime] = useState(""); // Stato per l'orario dell'appuntamento
-  const [nome, setNome] = useState(""); // Stato per il nome
-  const [cognome, setCognome] = useState(""); // Stato per il cognome
-  const [telefono, setTelefono] = useState(""); // Stato per il telefono
-  const [noteAggiuntive, setNoteAggiuntive] = useState(""); // Stato per le note aggiuntive
-  const [success, setSuccess] = useState(""); // Stato per il messaggio di successo
-  const [error, setError] = useState(""); // Stato per il messaggio di errore
+  const [selectedService, setSelectedService] = useState("");
+  const [date, setDate] = useState("");
+  const [timeSlots, setTimeSlots] = useState([]);
+  const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
+  const [nome, setNome] = useState("");
+  const [cognome, setCognome] = useState("");
+  const [telefono, setTelefono] = useState("");
+  const [noteAggiuntive, setNoteAggiuntive] = useState("");
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
+  const [showOffcanvas, setShowOffcanvas] = useState(false);
+  const [bookings, setBookings] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState(null);
 
-  const token = useSelector((state) => state.auth.token); // Recupera il token JWT dal Redux store
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
+  const token = useSelector((state) => state.auth.token);
 
-  // Funzione per controllare se il giorno è domenica o lunedì
-  const isDayDisabled = (date) => {
-    const selectedDate = new Date(date);
-    const dayOfWeek = selectedDate.getDay(); // 0 = Domenica, 1 = Lunedì, ..., 6 = Sabato
-    return dayOfWeek === 0 || dayOfWeek === 1; // Disabilita domenica e lunedì
+  useEffect(() => {
+    console.log("Utente autenticato:", user); // Debug per verificare il valore di `user`
+    console.log("Token:", token); // Debug per verificare il valore di `token`
+  }, [user, token]);
+
+  // Genera gli orari disponibili
+  useEffect(() => {
+    const generateTimeSlots = () => {
+      const slots = [];
+      for (let hour = 10; hour <= 17; hour++) {
+        slots.push(`${hour}:00`);
+      }
+      setTimeSlots(slots);
+    };
+    generateTimeSlots();
+  }, []);
+
+  // Filtra gli orari disponibili interrogando il backend
+  useEffect(() => {
+    if (date) {
+      const dayOfWeek = new Date(date).getDay();
+      if (dayOfWeek === 0 || dayOfWeek === 1) {
+        setError("Non è possibile prenotare di domenica o lunedì.");
+        setAvailableTimeSlots([]);
+        return;
+      }
+
+      const filteredSlots = [];
+      const promises = timeSlots.map((slot) => {
+        const dateTime = `${date}T${slot}`;
+        return fetch(
+          `http://localhost:8080/api/appointments/count?dateTime=${dateTime}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Errore nel recupero della disponibilità");
+            }
+            return response.json();
+          })
+          .then((count) => {
+            if (count < 2) {
+              filteredSlots.push(slot);
+            }
+          })
+          .catch((error) => {
+            console.error("Errore:", error);
+          });
+      });
+
+      Promise.all(promises)
+        .then(() => {
+          filteredSlots.sort((a, b) => {
+            const [hourA] = a.split(":").map(Number);
+            const [hourB] = b.split(":").map(Number);
+            return hourA - hourB;
+          });
+          setAvailableTimeSlots(filteredSlots);
+        })
+        .catch((error) => {
+          setError("Errore nel recupero degli orari disponibili.");
+        });
+    }
+  }, [date, timeSlots, token]);
+
+  // Recupera le prenotazioni
+  const fetchBookings = () => {
+    if (!user || !token) {
+      setError("Errore: utente non autenticato.");
+      return;
+    }
+
+    const endpoint =
+      user.role === "ADMIN"
+        ? "/api/bookings/all"
+        : `/api/bookings?user=${user.email}`;
+
+    fetch(`http://localhost:8080${endpoint}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Errore nel recupero delle prenotazioni");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setBookings(data);
+      })
+      .catch((error) => {
+        console.error("Errore:", error);
+        setError("Errore nel recupero delle prenotazioni.");
+      });
   };
 
+  // Gestione del form
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (isDayDisabled(date)) {
-      setError("Non è possibile prenotare di domenica o lunedì.");
-      setSuccess("");
+    if (
+      !selectedService ||
+      !date ||
+      !selectedTimeSlot ||
+      !nome ||
+      !cognome ||
+      !telefono
+    ) {
+      setError("Compila tutti i campi obbligatori.");
       return;
     }
 
     const payload = {
-      serviceIds,
-      dateTime: `${date}T${time}`, // Combina data e ora in formato ISO
+      serviceName: selectedService,
+      dateTime: `${date}T${selectedTimeSlot}`,
       nome,
       cognome,
       telefono,
-      noteAggiuntive: noteAggiuntive || null, // Se vuoto, invia null
+      noteAggiuntive: noteAggiuntive || null,
     };
 
     fetch("http://localhost:8080/api/appointments", {
       method: "POST",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Includi il token JWT nell'header Authorization
       },
       body: JSON.stringify(payload),
     })
@@ -57,10 +181,45 @@ function HBook() {
       .then((data) => {
         setSuccess("Prenotazione effettuata con successo!");
         setError("");
+        dispatch({ type: "ADD_BOOKING", payload: data });
       })
       .catch((error) => {
         setError("Errore: " + error.message);
         setSuccess("");
+      });
+  };
+
+  // Modifica o cancella una prenotazione
+  const handleEditBooking = (booking) => {
+    setSelectedBooking(booking);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedBooking(null);
+    setShowModal(false);
+  };
+
+  const handleDeleteBooking = (bookingId) => {
+    fetch(`http://localhost:8080/api/bookings/${bookingId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Errore nella cancellazione della prenotazione");
+        }
+        setBookings((prevBookings) =>
+          prevBookings.filter((b) => b.id !== bookingId)
+        );
+        setSuccess("Prenotazione cancellata con successo!");
+      })
+      .catch((error) => {
+        console.error("Errore:", error);
+        setError("Errore nella cancellazione della prenotazione.");
       });
   };
 
@@ -69,66 +228,69 @@ function HBook() {
       <h1 className="text-center">Prenota</h1>
       {error && <Alert variant="danger">{error}</Alert>}
       {success && <Alert variant="success">{success}</Alert>}
+      <Button
+        variant="primary"
+        className="mb-3"
+        onClick={() => {
+          setShowOffcanvas(true);
+          fetchBookings();
+        }}
+      >
+        Visualizza Prenotazioni
+      </Button>
       <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="formServiceIds" className="mb-3">
-          <Form.Label>Servizi</Form.Label>
-          <Form.Control
-            id="ServiceIdsInput"
-            type="text"
-            placeholder="Inserisci gli ID dei servizi separati da virgola (es. 1,2)"
-            value={serviceIds.join(",")}
-            onChange={(e) =>
-              setServiceIds(
-                e.target.value.split(",").map((id) => parseInt(id.trim()))
-              )
-            }
+        {/* Form per la prenotazione */}
+        <Form.Group controlId="formService" className="mb-3">
+          <Form.Label>Servizio</Form.Label>
+          <Form.Select
+            value={selectedService}
+            onChange={(e) => setSelectedService(e.target.value)}
             required
-          />
+          >
+            <option value="" disabled>
+              Seleziona un servizio
+            </option>
+            {servicesData.map((category) =>
+              category.services.map((service) => (
+                <option key={service.id} value={service.name}>
+                  {service.name}
+                </option>
+              ))
+            )}
+          </Form.Select>
         </Form.Group>
         <Form.Group controlId="formDate" className="mb-3">
           <Form.Label>Data</Form.Label>
           <Form.Control
-            id="DateInput"
             type="date"
             value={date}
-            onChange={(e) => {
-              const selectedDate = e.target.value;
-              if (isDayDisabled(selectedDate)) {
-                setError("Non è possibile selezionare domenica o lunedì.");
-                setDate(""); // Resetta il valore se il giorno è disabilitato
-              } else {
-                setError("");
-                setDate(selectedDate);
-              }
-            }}
+            onChange={(e) => setDate(e.target.value)}
             required
           />
         </Form.Group>
         <Form.Group controlId="formTime" className="mb-3">
           <Form.Label>Orario</Form.Label>
-          <Form.Select
-            id="TimeInput"
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-            required
-          >
-            <option value="" disabled>
-              Seleziona un orario
-            </option>
-            <option value="10:00">10:00</option>
-            <option value="11:00">11:00</option>
-            <option value="12:00">12:00</option>
-            <option value="13:00">13:00</option>
-            <option value="14:00">14:00</option>
-            <option value="15:00">15:00</option>
-            <option value="16:00">16:00</option>
-            <option value="17:00">17:00</option>
-          </Form.Select>
+          <Row>
+            {availableTimeSlots.map((slot) => (
+              <Col key={slot} xs={6} md={4} lg={3} className="mb-3">
+                <Card
+                  className={`text-center ${
+                    selectedTimeSlot === slot ? "border-primary" : ""
+                  }`}
+                  onClick={() => setSelectedTimeSlot(slot)}
+                  style={{ cursor: "pointer", backgroundColor: "#BFD3BF" }}
+                >
+                  <Card.Body>
+                    <Card.Title>{slot}</Card.Title>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
         </Form.Group>
         <Form.Group controlId="formNome" className="mb-3">
           <Form.Label>Nome</Form.Label>
           <Form.Control
-            id="NomeInput"
             type="text"
             placeholder="Inserisci il tuo nome"
             value={nome}
@@ -139,7 +301,6 @@ function HBook() {
         <Form.Group controlId="formCognome" className="mb-3">
           <Form.Label>Cognome</Form.Label>
           <Form.Control
-            id="CognomeInput"
             type="text"
             placeholder="Inserisci il tuo cognome"
             value={cognome}
@@ -150,7 +311,6 @@ function HBook() {
         <Form.Group controlId="formTelefono" className="mb-3">
           <Form.Label>Telefono</Form.Label>
           <Form.Control
-            id="TelefonoInput"
             type="tel"
             placeholder="Inserisci il tuo numero di telefono"
             value={telefono}
@@ -161,17 +321,94 @@ function HBook() {
         <Form.Group controlId="formNoteAggiuntive" className="mb-3">
           <Form.Label>Note Aggiuntive</Form.Label>
           <Form.Control
-            id="NoteAggiuntiveInput"
             as="textarea"
             placeholder="Inserisci eventuali note aggiuntive (opzionale)"
             value={noteAggiuntive}
             onChange={(e) => setNoteAggiuntive(e.target.value)}
           />
         </Form.Group>
-        <Button id="LoginButton" type="submit" className="w-100 mb-4">
+        <Button type="submit" className="w-100">
           Prenota
         </Button>
       </Form>
+
+      {/* Offcanvas per visualizzare le prenotazioni */}
+      <Offcanvas
+        show={showOffcanvas}
+        onHide={() => setShowOffcanvas(false)}
+        placement="end"
+      >
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>Prenotazioni</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          {bookings.length > 0 ? (
+            bookings.map((booking) => (
+              <div
+                key={booking.id}
+                className="d-flex justify-content-between align-items-center mb-3"
+              >
+                <div>
+                  <strong>{booking.serviceName}</strong> - {booking.dateTime}{" "}
+                  <br />
+                  {booking.nome} {booking.cognome} - {booking.telefono}
+                </div>
+                <div>
+                  <Pencil
+                    className="text-primary me-3"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => handleEditBooking(booking)}
+                  />
+                  <Trash
+                    className="text-danger"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => handleDeleteBooking(booking.id)}
+                  />
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>Nessuna prenotazione disponibile.</p>
+          )}
+        </Offcanvas.Body>
+      </Offcanvas>
+
+      {/* Modale per modificare o cancellare una prenotazione */}
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modifica Prenotazione</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedBooking && (
+            <div>
+              <p>
+                <strong>Servizio:</strong> {selectedBooking.serviceName}
+              </p>
+              <p>
+                <strong>Data e Ora:</strong> {selectedBooking.dateTime}
+              </p>
+              <p>
+                <strong>Nome:</strong> {selectedBooking.nome}
+              </p>
+              <p>
+                <strong>Cognome:</strong> {selectedBooking.cognome}
+              </p>
+              <p>
+                <strong>Telefono:</strong> {selectedBooking.telefono}
+              </p>
+              <p>
+                <strong>Note:</strong>{" "}
+                {selectedBooking.noteAggiuntive || "Nessuna nota"}
+              </p>
+            </div>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Chiudi
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

@@ -3,32 +3,31 @@ package it.haniel.haniel_backend.controller;
 import it.haniel.haniel_backend.dto.AppointmentDto;
 import it.haniel.haniel_backend.exception.ResourceNotFoundException;
 import it.haniel.haniel_backend.model.Appointment;
-import it.haniel.haniel_backend.model.ServiceEntity;
 import it.haniel.haniel_backend.model.User;
 import it.haniel.haniel_backend.service.AppointmentService;
-import it.haniel.haniel_backend.service.ServiceService;
-import it.haniel.haniel_backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/appointments")
 public class AppointmentController {
     @Autowired
     private AppointmentService appointmentService;
-    @Autowired
-    private ServiceService serviceService;
 
     @GetMapping("/{id}")
     public AppointmentDto getAppointment(@PathVariable Long id) {
         Appointment appointment = appointmentService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Appuntamento non trovato"));
         return toDto(appointment);
+    }
+
+    @GetMapping("/count")
+    public int countByDateTime(@RequestParam("dateTime") LocalDateTime dateTime) {
+        return appointmentService.countByDateTime(dateTime);
     }
 
     @PostMapping
@@ -44,18 +43,19 @@ public class AppointmentController {
                 dto.getCognome() == null || dto.getCognome().isBlank() ||
                 dto.getTelefono() == null || dto.getTelefono().isBlank() ||
                 dto.getDateTime() == null ||
-                dto.getServiceIds() == null || dto.getServiceIds().isEmpty()) {
+                dto.getServiceName() == null || dto.getServiceName().isBlank()) {
             throw new RuntimeException("Tutti i campi obbligatori devono essere compilati");
         }
 
-        Set<ServiceEntity> services = dto.getServiceIds().stream()
-                .map(id -> serviceService.findById(id)
-                        .orElseThrow(() -> new ResourceNotFoundException("Servizio non trovato: " + id)))
-                .collect(Collectors.toSet());
+        // Controllo disponibilità collaboratori
+        int count = appointmentService.countByDateTime(dto.getDateTime());
+        if (count >= 2) {
+            throw new RuntimeException("Non ci sono collaboratori disponibili in questo orario");
+        }
 
         Appointment appointment = new Appointment();
         appointment.setClient(client);
-        appointment.setServices(services);
+        appointment.setServiceName(dto.getServiceName());
         appointment.setDateTime(dto.getDateTime());
         appointment.setNome(dto.getNome());
         appointment.setCognome(dto.getCognome());
@@ -75,7 +75,7 @@ public class AppointmentController {
         AppointmentDto dto = new AppointmentDto();
         dto.setId(appointment.getId());
         dto.setClientId(appointment.getClient().getId());
-        dto.setServiceIds(appointment.getServices().stream().map(ServiceEntity::getId).collect(Collectors.toSet()));
+        dto.setServiceName(appointment.getServiceName());
         dto.setDateTime(appointment.getDateTime());
         dto.setNome(appointment.getNome());
         dto.setCognome(appointment.getCognome());
