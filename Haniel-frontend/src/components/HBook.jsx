@@ -37,7 +37,6 @@ function HBook() {
 
   useEffect(() => {
     console.log("Utente autenticato:", user); // Debug per verificare il valore di `user`
-    console.log("Token:", token); // Debug per verificare il valore di `token`
   }, [user, token]);
 
   useEffect(() => {
