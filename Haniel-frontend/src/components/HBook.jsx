@@ -303,6 +303,7 @@ function HBook() {
       {error && <Alert variant="danger">{error}</Alert>}
       {success && <Alert variant="success">{success}</Alert>}
       <Button
+        id="LoginButton"
         variant="primary"
         className="mb-3"
         onClick={() => {
@@ -312,7 +313,7 @@ function HBook() {
       >
         Visualizza Prenotazioni
       </Button>
-      <Form onSubmit={handleSubmit}>
+      <Form className="mb-5" onSubmit={handleSubmit}>
         {/* Form per la prenotazione */}
         <Form.Group controlId="formService" className="mb-3">
           <Form.Label>Servizio</Form.Label>
@@ -401,7 +402,7 @@ function HBook() {
             onChange={(e) => setNoteAggiuntive(e.target.value)}
           />
         </Form.Group>
-        <Button type="submit" className="w-100">
+        <Button id="LoginButton" type="submit" className="w-100">
           Prenota
         </Button>
       </Form>
@@ -573,14 +574,27 @@ function HBook() {
                   }
                 />
               </Form.Group>
-              <Button type="submit" variant="primary" className="w-100">
+              <Button
+                id="LoginButton"
+                type="submit"
+                variant="primary"
+                className="w-100"
+              >
                 Salva Modifiche
               </Button>
             </Form>
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
+          <Button
+            variant="secondary"
+            onClick={handleCloseModal}
+            style={{
+              backgroundColor: "#D0B3AB",
+              borderColor: "#D0B3AB",
+              color: "#fff",
+            }}
+          >
             Chiudi
           </Button>
         </Modal.Footer>

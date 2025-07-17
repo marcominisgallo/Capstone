@@ -107,3 +107,23 @@ nav.bg-white.py-1.border-bottom.border-2 {
   #LoginOption{
     color: #8B9F8B !important;
   }
+
+  /* Personalizza l'outline e il colore di riempimento del dropdown */
+.custom-dropdown-toggle {
+  border-color: #8B9F8B !important; /* Colore dell'outline */
+  background-color: white !important; /* Colore di riempimento */
+  color: #8B9F8B !important; /* Colore del testo */
+  transition: all 0.3s ease; /* Transizione per un effetto più fluido */
+}
+
+.custom-dropdown-toggle[aria-expanded="true"] {
+  border-color: #8B9F8B !important; /* Colore dell'outline quando è aperto */
+  background-color: #8B9F8B !important; /* Colore di riempimento quando è aperto */
+  color: #000000 !important; /* Colore del testo quando è aperto */
+}
+
+.custom-dropdown-toggle:not([aria-expanded="true"]) {
+  border-color: #8B9F8B !important; /* Colore dell'outline quando è chiuso */
+  background-color: white !important; /* Colore di riempimento quando è chiuso */
+  color: #8B9F8B !important; /* Colore del testo quando è chiuso */
+}
