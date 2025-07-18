@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 
 // Configurazione di Vite
 export default defineConfig({
-  base: "/Capstone/",
+  base: "/capstone/",
   plugins: [react()],
   build: {
     outDir: "dist", // La directory di output sarà 'dist' (Netlify la cerca qui)

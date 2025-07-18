@@ -31,8 +31,8 @@ function HNavbar() {
           onClick={() => dispatch(closeNavbar())}
         >
           <img
-            alt=""
-            src="/HanielLogo.svg"
+            alt="Logo Haniel"
+            src="/capstone/HanielLogo.svg"
             height="50"
             className="d-inline-block align-top"
           />
