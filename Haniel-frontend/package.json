@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://marcominisgallo.github.io/capstone/capstone",
+  "homepage": "https://marcominisgallo.github.io/capstone",
   "scripts": {
     "predeploy": "npm run build",
   "deploy": "gh-pages -d dist",
