@@ -1,19 +1,21 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-// Configurazione di Vite
+// Imposta dinamicamente il base path
+const isGitHubPages = process.env.DEPLOY_TARGET === "GH_PAGES";
+
 export default defineConfig({
-  base: "/Capstone/",
+  base: isGitHubPages ? "/capstone/" : "/",
   plugins: [react()],
   build: {
-    outDir: "dist", // La directory di output sarà 'dist' (Netlify la cerca qui)
+    outDir: "dist",
   },
   server: {
-    port: 3000, // Porta per il server di sviluppo locale
+    port: 3000,
   },
   resolve: {
     alias: {
-      "@": "/src", // Alias opzionale per semplificare i percorsi
+      "@": "/src",
     },
   },
 });
