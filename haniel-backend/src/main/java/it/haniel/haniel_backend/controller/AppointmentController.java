@@ -50,11 +50,19 @@ public class AppointmentController {
         return count < 2;
     }
 
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<AppointmentDto> getAllAppointments() {
+        return appointmentService.findAll().stream()
+                .map(this::toDto)
+                .toList();
+    }
+
     @PostMapping
-    @PreAuthorize("hasRole('CLIENT')")
+    @PreAuthorize("hasRole('CLIENT') or hasRole('ADMIN')")
     public AppointmentDto createAppointment(@RequestBody AppointmentDto dto) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (!(principal instanceof User client)) {
+        if (!(principal instanceof User user)) {
             throw new ResourceNotFoundException("Utente autenticato non trovato");
         }
 
@@ -67,14 +75,17 @@ public class AppointmentController {
             throw new RuntimeException("Tutti i campi obbligatori devono essere compilati");
         }
 
-        // Controllo disponibilità collaboratori
-        int count = appointmentService.countByDateTime(dto.getDateTime());
-        if (count >= 2) {
-            throw new RuntimeException("Non ci sono collaboratori disponibili in questo orario");
+        // Controllo disponibilità collaboratori SOLO per i client
+        boolean isAdmin = user.getRole() != null && user.getRole().name().equals("ADMIN");
+        if (!isAdmin) {
+            int count = appointmentService.countByDateTime(dto.getDateTime());
+            if (count >= 2) {
+                throw new RuntimeException("Non ci sono collaboratori disponibili in questo orario");
+            }
         }
 
         Appointment appointment = new Appointment();
-        appointment.setClient(client);
+        appointment.setClient(user);
         appointment.setServiceName(dto.getServiceName());
         appointment.setDateTime(dto.getDateTime());
         appointment.setNome(dto.getNome());

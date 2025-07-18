@@ -13,6 +13,7 @@ import servicesData from "../data/servicesData";
 import { useDispatch, useSelector } from "react-redux";
 import { Pencil, Trash } from "react-bootstrap-icons";
 import { loginSuccess } from "../redux/authSlice";
+import { useNavigate } from "react-router-dom";
 
 function HBook() {
   const [selectedService, setSelectedService] = useState("");
@@ -31,6 +32,7 @@ function HBook() {
   const [showModal, setShowModal] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const token = useSelector((state) => state.auth.token);
@@ -297,6 +299,19 @@ function HBook() {
       });
   };
 
+  const handleViewBookings = () => {
+    console.log("Ruolo utente:", user?.role); // Debug del ruolo
+
+    if (user?.role?.toLowerCase() === "admin") {
+      console.log("Reindirizzamento a HAdminApp"); // Debug del reindirizzamento
+      navigate("/admin-app"); // Reindirizza al componente HAdminApp
+    } else {
+      console.log("Apertura Offcanvas"); // Debug dell'Offcanvas
+      setShowOffcanvas(true);
+      fetchBookings();
+    }
+  };
+
   return (
     <div className="container mt-5">
       <h1 className="text-center">Prenota</h1>
@@ -306,10 +321,7 @@ function HBook() {
         id="LoginButton"
         variant="primary"
         className="mb-3"
-        onClick={() => {
-          setShowOffcanvas(true);
-          fetchBookings();
-        }}
+        onClick={handleViewBookings}
       >
         Visualizza Prenotazioni
       </Button>

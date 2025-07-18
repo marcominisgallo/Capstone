@@ -10,6 +10,7 @@ import HContactS from "./components/HContactS";
 import HLogin from "./components/HLogin";
 import HBook from "./components/HBook";
 import HServicesOffered from "./components/HServicesOffered";
+import HAdminApp from "./components/HAdminApp";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -30,6 +31,7 @@ function App() {
               <Route path="/login" element={<HLogin />} />
               <Route path="/prenota" element={<HBook />} />
               <Route path="servizi-offerti" element={<HServicesOffered />} />
+              <Route path="/admin-app" element={<HAdminApp />} />
             </Routes>
           </div>
           <HFooter />

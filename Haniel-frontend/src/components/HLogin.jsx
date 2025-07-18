@@ -21,34 +21,45 @@ function HLogin() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const endpoint = isLogin ? "/api/auth/login" : "/api/auth/register";
+    const endpoint = isLogin ? "/api/auth/login" : "/api/auth/register"; // Usa l'endpoint corretto
     const payload = isLogin
       ? { email, password }
       : { email, password, nome, cognome, telefono }; // Aggiungi i campi richiesti per la registrazione
 
-    fetch("http://localhost:8080/api/auth/login", {
+    fetch(`http://localhost:8080${endpoint}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify(payload),
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Errore durante il login");
+          throw new Error(
+            isLogin
+              ? "Errore durante il login"
+              : "Errore durante la registrazione"
+          );
         }
         return response.json();
       })
       .then((data) => {
-        // Salva il token e i dati dell'utente in localStorage
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
+        if (isLogin) {
+          // Salva il token e i dati dell'utente in localStorage
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("user", JSON.stringify(data.user));
 
-        // Dispatch Redux action per salvare il token e l'utente
-        dispatch(loginSuccess({ token: data.token, user: data.user }));
-        setSuccess("Accesso effettuato con successo!");
+          // Dispatch Redux action per salvare il token e l'utente
+          dispatch(loginSuccess({ token: data.token, user: data.user }));
+          setSuccess("Accesso effettuato con successo!");
+          navigate("/prenota"); // Reindirizza al path per prenotare
+        } else {
+          setSuccess(
+            "Registrazione effettuata con successo! Effettua il login."
+          );
+          navigate("/login"); // Reindirizza al login dopo la registrazione
+        }
         setError("");
-        navigate("/prenota"); // Reindirizza al path per prenotare
       })
       .catch((error) => {
         setError("Errore: " + error.message);
