@@ -38,9 +38,7 @@ nav.bg-white.py-1.border-bottom.border-2 {
   }
 
   #PrenotaButton {
-    position: absolute;
-    bottom: -7%;
-    left: 30%;
+    
     background-color: #BFD3BF !important;
     color: black;
     border: none;

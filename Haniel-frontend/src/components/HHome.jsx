@@ -31,59 +31,54 @@ function HHome() {
         >
           <img src={`HanielLogo.svg`} alt="logo" className="w-100" />
         </Col>
-        <Col xs={10} lg={6} className="offset-2 offset-lg-1 mt-5">
-          <div id="HomePic">
-            <Image src={image1} className="w-75 mt-5 rounded-2" />
-            <Link to={isAuthenticated ? "/prenota" : "/login"}>
-              <Button id="PrenotaButton" className="py-3 px-3 rounded-pill">
-                Prenota ora!
-              </Button>
-            </Link>
-          </div>
+        <Col xs={10} lg={6} className="offset-2 offset-lg-1">
+          <Row>
+            <Col xs={12}>
+              <div id="HomePic">
+                <Image src={image1} className="w-75 mt-5 rounded-2 ms-2" />
+              </div>
+            </Col>
+            <Col xs={9} className="text-center mt-2 ms-2">
+              <Link to={isAuthenticated ? "/prenota" : "/login"}>
+                <Button id="PrenotaButton" className="py-3 px-3 rounded-pill">
+                  Prenota ora!
+                </Button>
+              </Link>
+            </Col>
+          </Row>
         </Col>
       </Row>
 
       {/* Galleria fotografica */}
-      <Row className="my-5">
+      <Row className="mt-3 mb-5">
         <h2 className="text-center mb-4">I nostri lavori</h2>
-        {/* Foto con dimensioni uguali */}
         <Col xs={12} className="d-flex flex-wrap justify-content-center">
-          {[image2, image10, image11, image12, image13, image14].map(
-            (image, index) => (
-              <div key={index} className="m-2">
-                <img
-                  src={image}
-                  alt={`Gallery ${index + 1}`}
-                  className="rounded-2"
-                  style={{
-                    width: "150px",
-                    height: "150px",
-                    objectFit: "cover",
-                  }}
-                />
-              </div>
-            )
-          )}
-        </Col>
-
-        {/* Foto con dimensioni diverse */}
-        <Col xs={12} className="d-flex flex-wrap justify-content-center mt-4">
-          {[image3, image4, image5, image6, image7, image8, image9].map(
-            (image, index) => (
-              <div key={index} className="m-2">
-                <img
-                  src={image}
-                  alt={`Gallery ${index + 7}`}
-                  className="rounded-2"
-                  style={{
-                    width: `${100 + index * 10}px`,
-                    height: `${100 + index * 15}px`,
-                    objectFit: "cover",
-                  }}
-                />
-              </div>
-            )
-          )}
+          {[
+            image2,
+            image10,
+            image11,
+            image12,
+            image13,
+            image14,
+            image3,
+            image4,
+            image5,
+            image6,
+            image7,
+            image8,
+          ].map((image, index) => (
+            <div key={index} className="col-2 p-2">
+              <img
+                src={image}
+                alt={`Gallery ${index + 1}`}
+                className="rounded-2 w-100"
+                style={{
+                  height: "200px", // Dimensione uniforme
+                  objectFit: "cover", // Adatta l'immagine senza distorsioni
+                }}
+              />
+            </div>
+          ))}
         </Col>
       </Row>
     </HMax>

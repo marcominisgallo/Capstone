@@ -32,7 +32,7 @@ function HNavbar() {
         >
           <img
             alt="Logo Haniel"
-            src="/Capstone/HanielLogo.svg"
+            src="/HanielLogo.svg"
             height="50"
             className="d-inline-block align-top"
           />
