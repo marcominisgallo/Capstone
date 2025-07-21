@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
-  base: process.env.DEPLOY_TARGET === "GH_PAGES" ? "/capstone/" : "/", // Percorso base dinamico
+  base: process.env.DEPLOY_TARGET === "GH_PAGES" ? "/Capstone/" : "/", // Percorso base dinamico
   plugins: [react()],
   build: {
     outDir: "dist",
