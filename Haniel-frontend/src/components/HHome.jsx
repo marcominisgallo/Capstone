@@ -29,7 +29,11 @@ function HHome() {
           lg={3}
           className="offset-2 offset-md-3 offset-lg-2 d-none d-lg-block"
         >
-          <img src="/HanielLogo.svg" alt="logo" className="w-100" />
+          <img
+            src={`${import.meta.env.DEPLOY_TARGET}HanielLogo.svg`}
+            alt="logo"
+            className="w-100"
+          />
         </Col>
         <Col xs={10} lg={6} className="offset-2 offset-lg-1 mt-5">
           <div id="HomePic">
