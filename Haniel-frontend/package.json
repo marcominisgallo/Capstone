@@ -6,7 +6,7 @@
   "homepage": "https://marcominisgallo.github.io/capstone",
   "scripts": {
     "predeploy": "npm run build",
-  "deploy": "gh-pages -d dist",
+    "deploy": "gh-pages -d dist",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
@@ -15,6 +15,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",
     "bootstrap": "^5.3.7",
+    "dotenv": "^17.2.0",
     "react": "^19.1.0",
     "react-bootstrap": "^2.10.10",
     "react-bootstrap-icons": "^1.11.6",

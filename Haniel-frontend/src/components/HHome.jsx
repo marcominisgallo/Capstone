@@ -29,11 +29,7 @@ function HHome() {
           lg={3}
           className="offset-2 offset-md-3 offset-lg-2 d-none d-lg-block"
         >
-          <img
-            src={`${import.meta.env.DEPLOY_TARGET}HanielLogo.svg`}
-            alt="logo"
-            className="w-100"
-          />
+          <img src={`HanielLogo.svg`} alt="logo" className="w-100" />
         </Col>
         <Col xs={10} lg={6} className="offset-2 offset-lg-1 mt-5">
           <div id="HomePic">
@@ -48,7 +44,7 @@ function HHome() {
       </Row>
 
       {/* Galleria fotografica */}
-      <Row className="mt-5">
+      <Row className="my-5">
         <h2 className="text-center mb-4">I nostri lavori</h2>
         {/* Foto con dimensioni uguali */}
         <Col xs={12} className="d-flex flex-wrap justify-content-center">

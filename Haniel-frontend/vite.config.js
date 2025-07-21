@@ -1,8 +1,12 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import dotenv from "dotenv";
+
+// Carica le variabili di ambiente dal file `.env`
+dotenv.config();
 
 export default defineConfig({
-  base: process.env.DEPLOY_TARGET === "GH_PAGES" ? "/Capstone/" : "/", // Percorso base dinamico
+  base: "/",
   plugins: [react()],
   build: {
     outDir: "dist",
