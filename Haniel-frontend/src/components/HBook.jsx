@@ -155,6 +155,18 @@ function HBook() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    const newBooking = {
+      service: selectedService,
+      date,
+      timeSlot: selectedTimeSlot,
+      nome,
+      cognome,
+      telefono,
+      noteAggiuntive,
+    };
+
+    console.log("Prenotazione inviata:", newBooking);
+
     if (
       !selectedService ||
       !date ||
@@ -191,9 +203,32 @@ function HBook() {
         return response.json();
       })
       .then((data) => {
+        // Imposta il messaggio di successo
         setSuccess("Prenotazione effettuata con successo!");
+
+        // Resetta eventuali errori precedenti
         setError("");
+
+        // Aggiorna lo stato globale delle prenotazioni tramite Redux
         dispatch({ type: "ADD_BOOKING", payload: data });
+
+        // Log per debug
+        console.log("Prenotazione aggiunta:", data);
+
+        // Reset del form
+        setSelectedService("");
+        setDate("");
+        setSelectedTimeSlot("");
+        setAvailableTimeSlots([]); // Reset degli orari disponibili
+        setNome("");
+        setCognome("");
+        setTelefono("");
+        setNoteAggiuntive("");
+
+        // Nascondi il messaggio di successo dopo qualche secondo
+        setTimeout(() => {
+          setSuccess("");
+        }, 5000);
       })
       .catch((error) => {
         setError("Errore: " + error.message);
@@ -288,14 +323,27 @@ function HBook() {
         if (!response.ok) {
           throw new Error("Errore nella cancellazione della prenotazione");
         }
+        // Aggiorna lo stato delle prenotazioni rimuovendo quella cancellata
         setBookings((prevBookings) =>
           prevBookings.filter((b) => b.id !== bookingId)
         );
+        // Imposta il messaggio di successo
         setSuccess("Prenotazione cancellata con successo!");
+
+        // Nascondi il messaggio di successo dopo 3 secondi
+        setTimeout(() => {
+          setSuccess("");
+        }, 5000);
       })
       .catch((error) => {
         console.error("Errore:", error);
+        // Imposta il messaggio di errore
         setError("Errore nella cancellazione della prenotazione.");
+
+        // Nascondi il messaggio di errore dopo 3 secondi
+        setTimeout(() => {
+          setError("");
+        }, 5000);
       });
   };
 
@@ -327,24 +375,26 @@ function HBook() {
       </Button>
       <Form className="mb-5" onSubmit={handleSubmit}>
         {/* Form per la prenotazione */}
-        <Form.Group controlId="formService" className="mb-3">
-          <Form.Label>Servizio</Form.Label>
-          <Form.Select
+        <Form.Group controlId="serviceSelect">
+          <Form.Label>Seleziona un servizio</Form.Label>
+          <Form.Control
+            as="select"
             value={selectedService}
             onChange={(e) => setSelectedService(e.target.value)}
-            required
           >
             <option value="" disabled>
-              Seleziona un servizio
+              -- Seleziona un servizio --
             </option>
-            {servicesData.map((category) =>
-              category.services.map((service) => (
-                <option key={service.id} value={service.name}>
-                  {service.name}
-                </option>
-              ))
-            )}
-          </Form.Select>
+            {servicesData.map((categoria) => (
+              <optgroup key={categoria.id} label={categoria.name}>
+                {categoria.services.map((servizio) => (
+                  <option key={servizio.id} value={servizio.name}>
+                    {servizio.name}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
+          </Form.Control>
         </Form.Group>
         <Form.Group controlId="formDate" className="mb-3">
           <Form.Label>Data</Form.Label>
