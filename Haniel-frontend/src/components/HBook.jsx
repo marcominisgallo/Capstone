@@ -63,7 +63,7 @@ function HBook() {
     generateTimeSlots();
   }, []);
 
-  // Filtra gli orari disponibili interrogando il backend
+  // Filtra gli orari disponibili
   useEffect(() => {
     if (date) {
       const dayOfWeek = new Date(date).getDay();
@@ -203,17 +203,11 @@ function HBook() {
         return response.json();
       })
       .then((data) => {
-        // Imposta il messaggio di successo
         setSuccess("Prenotazione effettuata con successo!");
 
-        // Resetta eventuali errori precedenti
         setError("");
 
-        // Aggiorna lo stato globale delle prenotazioni tramite Redux
         dispatch({ type: "ADD_BOOKING", payload: data });
-
-        // Log per debug
-        console.log("Prenotazione aggiunta:", data);
 
         // Reset del form
         setSelectedService("");
@@ -225,7 +219,6 @@ function HBook() {
         setTelefono("");
         setNoteAggiuntive("");
 
-        // Nascondi il messaggio di successo dopo qualche secondo
         setTimeout(() => {
           setSuccess("");
         }, 5000);
@@ -236,7 +229,7 @@ function HBook() {
       });
   };
 
-  // Modifica o cancella una prenotazione
+  // Modifica una prenotazione
   const handleEditBooking = (booking) => {
     setSelectedBooking(booking);
     setShowModal(true);
@@ -252,7 +245,7 @@ function HBook() {
 
     const dateTime = selectedBooking.dateTime;
 
-    // Verifica la disponibilità dell'orario
+    // Verifica la disponibilità orario
     fetch(
       `http://localhost:8080/api/appointments/check-availability?dateTime=${dateTime}`,
       {
@@ -330,7 +323,6 @@ function HBook() {
         // Imposta il messaggio di successo
         setSuccess("Prenotazione cancellata con successo!");
 
-        // Nascondi il messaggio di successo dopo 3 secondi
         setTimeout(() => {
           setSuccess("");
         }, 5000);
@@ -340,7 +332,6 @@ function HBook() {
         // Imposta il messaggio di errore
         setError("Errore nella cancellazione della prenotazione.");
 
-        // Nascondi il messaggio di errore dopo 3 secondi
         setTimeout(() => {
           setError("");
         }, 5000);
@@ -348,13 +339,9 @@ function HBook() {
   };
 
   const handleViewBookings = () => {
-    console.log("Ruolo utente:", user?.role); // Debug del ruolo
-
     if (user?.role?.toLowerCase() === "admin") {
-      console.log("Reindirizzamento a HAdminApp"); // Debug del reindirizzamento
       navigate("/admin-app"); // Reindirizza al componente HAdminApp
     } else {
-      console.log("Apertura Offcanvas"); // Debug dell'Offcanvas
       setShowOffcanvas(true);
       fetchBookings();
     }
@@ -365,14 +352,20 @@ function HBook() {
       <h1 className="text-center">Prenota</h1>
       {error && <Alert variant="danger">{error}</Alert>}
       {success && <Alert variant="success">{success}</Alert>}
-      <Button
-        id="LoginButton"
-        variant="primary"
-        className="mb-3"
-        onClick={handleViewBookings}
-      >
-        Visualizza Prenotazioni
-      </Button>
+      <div className="d-flex justify-content-between mb-3">
+        <Button id="LoginButton" variant="primary" onClick={handleViewBookings}>
+          Visualizza Prenotazioni
+        </Button>
+        {user?.role?.toLowerCase() === "admin" && (
+          <Button
+            id="AllBookingsButton"
+            variant="secondary"
+            onClick={() => navigate("/all-app")}
+          >
+            Tutte le Prenotazioni
+          </Button>
+        )}
+      </div>
       <Form className="mb-5" onSubmit={handleSubmit}>
         {/* Form per la prenotazione */}
         <Form.Group controlId="serviceSelect">
@@ -469,7 +462,7 @@ function HBook() {
         </Button>
       </Form>
 
-      {/* Offcanvas per visualizzare le prenotazioni */}
+      {/* Offcanvas per visualizzare prenotazioni */}
       <Offcanvas
         show={showOffcanvas}
         onHide={() => setShowOffcanvas(false)}
@@ -510,7 +503,7 @@ function HBook() {
         </Offcanvas.Body>
       </Offcanvas>
 
-      {/* Modale per modificare o cancellare una prenotazione */}
+      {/* Modale per modificare prenotazione */}
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>Modifica Prenotazione</Modal.Title>

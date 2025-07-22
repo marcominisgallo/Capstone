@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Table } from "react-bootstrap";
+import { Button, Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function HAdminApp() {
+  const navigate = useNavigate();
   const [appointments, setAppointments] = useState([]);
-  const token = useSelector((state) => state.auth.token); // Recupera il token per l'autenticazione
+  const token = useSelector((state) => state.auth.token); // Recupera il token
 
   useEffect(() => {
-    // Recupera gli appuntamenti dal backend
     fetch("http://localhost:8080/api/appointments/all", {
       method: "GET",
       headers: {
@@ -40,7 +41,7 @@ function HAdminApp() {
     return date;
   });
 
-  // Organizza gli appuntamenti per giorno della settimana
+  // Organizza gli appuntamenti per giorno
   const appointmentsByDay = daysOfWeek.map((day) =>
     appointments.filter(
       (appointment) =>
@@ -52,6 +53,15 @@ function HAdminApp() {
   return (
     <div className="container mt-5">
       <h1 className="text-center">Appuntamenti Settimanali</h1>
+      <div className="d-flex justify-content-end mb-4">
+        <Button
+          id="PrenotaButton"
+          variant="secondary"
+          onClick={() => navigate("/all-app")}
+        >
+          Tutte le Prenotazioni
+        </Button>
+      </div>
       <Table striped bordered hover>
         <thead>
           <tr>
