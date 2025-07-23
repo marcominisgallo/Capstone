@@ -51,7 +51,9 @@ function HHome() {
 
       {/* Galleria fotografica */}
       <Row className="mt-3 mb-5">
-        <h2 className="text-center mb-4">I nostri lavori</h2>
+        <h2 id="nsLavori" className="text-center mb-4">
+          I nostri lavori
+        </h2>
         <Col xs={12} className="d-flex flex-wrap justify-content-center">
           {[
             image2,
