@@ -37,7 +37,7 @@ cd Capstone
 ### 2. Frontend
 
 ```bash
-cd frontend
+cd haniel-frontend
 npm install
 npm run dev
 ```
@@ -182,7 +182,7 @@ cd Capstone
 ### 2. Frontend
 
 ```bash
-cd frontend
+cd haniel-frontend
 npm install
 npm run dev
 ```
